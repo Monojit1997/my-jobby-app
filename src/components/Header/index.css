@@ -1,0 +1,30 @@
+.navbar-bg-container {
+  background-color: #272727;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button {
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 15px;
+  height: 50px;
+  width: 100px;
+  border-radius: 10px;
+  border: none;
+  margin-right: 20px;
+}
+.header-option {
+  color: #f8fafc;
+  margin-right: 15px;
+  font-weight: bold;
+}
+.header-option-container {
+  display: flex;
+  list-style-type: none;
+}
+.nav-link {
+  text-decoration: none;
+}
