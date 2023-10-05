@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 1;
 }
 .button {
   background-color: #4f46e5;
@@ -15,6 +16,7 @@
   border-radius: 10px;
   border: none;
   margin-right: 20px;
+  align-self: flex-end;
 }
 .header-option {
   color: #f8fafc;
@@ -24,7 +26,37 @@
 .header-option-container {
   display: flex;
   list-style-type: none;
+  flex-grow: 1;
+  justify-content: center;
 }
 .nav-link {
   text-decoration: none;
+}
+.menu-container {
+  display: flex;
+  flex-grow: 1;
+}
+.menu-container-small-device {
+  padding: 10px;
+  display: flex;
+}
+.icon-style {
+  fill: #ffffff;
+  height: 20px;
+  width: 20px;
+}
+.jobby-logo {
+  height: 50px;
+  width: 100px;
+}
+
+@media all and (min-width: 576px) {
+  .menu-container-small-device {
+    display: none;
+  }
+}
+@media all and (max-width: 575px) {
+  .menu-container {
+    display: none;
+  }
 }

@@ -31,7 +31,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  width: 30%;
+  width: 50%;
 }
 .search-input {
   background-color: #000000;
@@ -122,7 +122,26 @@
 .search-button {
   background-color: transparent;
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .job-results-container {
   margin-top: 20px;
+}
+@media all and (max-width: 575px) {
+  .jobs-bg-container {
+    flex-direction: column;
+  }
+  .search-job-container {
+    order: 1;
+  }
+  .profile-and-filter-container {
+    order: 0;
+    min-width: 100%;
+  }
+  .input-card {
+    order: 0;
+    width: 100%;
+  }
 }

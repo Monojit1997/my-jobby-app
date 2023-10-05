@@ -6,6 +6,7 @@ import Profile from '../Profile'
 import Header from '../Header'
 import EmploymentFilter from '../EmploymentFilter'
 import SalaryRangeFilter from '../SalaryRangeFilter'
+import LocationFilter from '../LocationFilter'
 import JobCard from '../JobCard'
 import './index.css'
 
@@ -47,6 +48,29 @@ const employmentTypesList = [
   },
 ]
 
+const locationsList = [
+  {
+    label: 'Bangalore',
+    locationsId: 'BANGALORE',
+  },
+  {
+    label: 'Hyderabad',
+    locationsId: 'HYDERABAD',
+  },
+  {
+    label: 'Chennai',
+    locationsId: 'CHENNAI',
+  },
+  {
+    label: 'Delhi',
+    locationsId: 'DELHI',
+  },
+  {
+    label: 'Mumbai',
+    locationsId: 'MUMBAI',
+  },
+]
+
 const apiStatusConstants = {
   initial: 'INITIAL',
   success: 'SUCCESS',
@@ -58,7 +82,8 @@ class Jobs extends Component {
   state = {
     jobList: [],
     searchInput: '',
-    employmentType: '',
+    employmentType: [],
+    locationType: [],
     minimumpackage: '',
     apiStatus: apiStatusConstants.initial,
   }
@@ -76,8 +101,14 @@ class Jobs extends Component {
       apiStatus: apiStatusConstants.inProgress,
     })
     const jwtToken = Cookies.get('jwt_token')
-    const {searchInput, employmentType, minimumpackage} = this.state
-    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employmentType}&minimum_package=${minimumpackage}&search=${searchInput}`
+    const {
+      searchInput,
+      employmentType,
+      minimumpackage,
+      locationType,
+    } = this.state
+    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join()}&minimum_package=${minimumpackage}&search=${searchInput}&location=${locationType.join()}`
+    console.log(apiUrl)
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -87,6 +118,7 @@ class Jobs extends Component {
     const response = await fetch(apiUrl, options)
     if (response.ok) {
       const data = await response.json()
+      console.log(data)
       const updatedData = data.jobs.map(eachJobs => ({
         id: eachJobs.id,
         title: eachJobs.title,
@@ -192,6 +224,21 @@ class Jobs extends Component {
     </div>
   )
 
+  renderLocations = () => (
+    <div>
+      <h1 className="employment-heading">Preferred Location</h1>
+      <ul className="list-of-emploment">
+        {locationsList.map(eachItem => (
+          <LocationFilter
+            eachItem={eachItem}
+            key={eachItem.locationsId}
+            changeLocationType={this.changeLocationType}
+          />
+        ))}
+      </ul>
+    </div>
+  )
+
   renderAllJobs = () => {
     const {apiStatus} = this.state
 
@@ -211,18 +258,45 @@ class Jobs extends Component {
     this.getJobDetails()
   }
 
+  changeLocationType = location => {
+    const {locationType} = this.state
+    if (locationType.includes(location)) {
+      const filterArray = locationType.filter(eachItem => eachItem !== location)
+      this.setState({locationType: filterArray}, this.getJobDetails)
+    } else {
+      this.setState(
+        prevState => ({
+          locationType: [...prevState.locationType, location],
+        }),
+        this.getJobDetails,
+      )
+      console.log(locationType)
+    }
+  }
+
   changeEmploymentType = employment => {
-    this.setState({employmentType: employment}, this.getJobDetails)
+    const {employmentType} = this.state
+    if (employmentType.includes(employment)) {
+      const filterArray = employmentType.filter(
+        eachItem => eachItem !== employment,
+      )
+      this.setState({employmentType: filterArray}, this.getJobDetails)
+    } else {
+      this.setState(
+        prevState => ({
+          employmentType: [...prevState.employmentType, employment],
+        }),
+        this.getJobDetails,
+      )
+    }
   }
 
   changeSalaryRange = salaryRange => {
-    console.log(salaryRange)
     this.setState({minimumpackage: salaryRange}, this.getJobDetails)
   }
 
   render() {
-    const {searchInput, employmentType} = this.state
-    console.log(employmentType)
+    const {searchInput} = this.state
     return (
       <>
         <Header />
@@ -233,6 +307,8 @@ class Jobs extends Component {
             {this.renderEmployment()}
             <hr className="horizontal-line" />
             {this.renderSalaryRange()}
+            <hr className="horizontal-line" />
+            {this.renderLocations()}
           </div>
           <div className="search-job-container">
             <div className="input-card">
