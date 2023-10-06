@@ -83,7 +83,7 @@ class Jobs extends Component {
     jobList: [],
     searchInput: '',
     employmentType: [],
-    locationType: [],
+    locationType: '',
     minimumpackage: '',
     apiStatus: apiStatusConstants.initial,
   }
@@ -107,8 +107,7 @@ class Jobs extends Component {
       minimumpackage,
       locationType,
     } = this.state
-    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join()}&minimum_package=${minimumpackage}&search=${searchInput}&location=${locationType.join()}`
-    console.log(apiUrl)
+    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join()}&minimum_package=${minimumpackage}&search=${searchInput}&location=${locationType}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -259,19 +258,7 @@ class Jobs extends Component {
   }
 
   changeLocationType = location => {
-    const {locationType} = this.state
-    if (locationType.includes(location)) {
-      const filterArray = locationType.filter(eachItem => eachItem !== location)
-      this.setState({locationType: filterArray}, this.getJobDetails)
-    } else {
-      this.setState(
-        prevState => ({
-          locationType: [...prevState.locationType, location],
-        }),
-        this.getJobDetails,
-      )
-      console.log(locationType)
-    }
+    this.setState({locationType: location}, this.getJobDetails)
   }
 
   changeEmploymentType = employment => {
@@ -295,6 +282,20 @@ class Jobs extends Component {
     this.setState({minimumpackage: salaryRange}, this.getJobDetails)
   }
 
+  clearAllFilter = () => {
+    this.setState(
+      {
+        jobList: [],
+        searchInput: '',
+        employmentType: [],
+        locationType: '',
+        minimumpackage: '',
+        apiStatus: apiStatusConstants.initial,
+      },
+      this.getJobDetails,
+    )
+  }
+
   render() {
     const {searchInput} = this.state
     return (
@@ -309,6 +310,13 @@ class Jobs extends Component {
             {this.renderSalaryRange()}
             <hr className="horizontal-line" />
             {this.renderLocations()}
+            <button
+              type="button"
+              className="button"
+              onClick={this.clearAllFilter}
+            >
+              Clear Filter
+            </button>
           </div>
           <div className="search-job-container">
             <div className="input-card">

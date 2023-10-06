@@ -11,7 +11,8 @@ const LocationFilter = props => {
   return (
     <li className="employment-filterlist">
       <input
-        type="checkBox"
+        type="radio"
+        name="location"
         value={locationsId}
         onChange={selectLocationType}
       />

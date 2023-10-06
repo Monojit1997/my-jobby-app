@@ -7,6 +7,7 @@ const EmploymentFilter = props => {
   const selectEmploymentType = event => {
     changeEmploymentType(event.target.value)
   }
+
   return (
     <li className="employment-filterlist">
       <input
